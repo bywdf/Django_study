@@ -13,3 +13,8 @@ from blog.models import Post
 #  post.title='New title'
 
 all_posts = Post.objects.all()
+
+post = Post.objects.get(id=1)
+post.tags.add('music', 'jazz', 'django')
+post.tags.all()
+post.tags.remove('django')

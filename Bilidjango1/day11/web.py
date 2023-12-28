@@ -22,5 +22,9 @@ def user_listt():
 def register():
     return render_template('register.html')
 
+@app.route('/mishop')
+def register():
+    return render_template('mishop.html')
+
 if __name__ == '__main__':
     app.run()

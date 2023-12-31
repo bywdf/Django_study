@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from stu1.models import UserInfo
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -23,11 +24,43 @@ def login(request):
         return render(request, 'login.html', {'error_msg':'用户名或密码错误'})
 
 def orm(request):
-    # 新建数据库
-    UserInfo.objects.create(name = 'jhon', password = '123', age = 25)
-    UserInfo.objects.create(name = 'lisa', password = '456', age = 23)
+    # 1.新建数据库
+    # UserInfo.objects.create(name = 'jhon', password = '123', age = 25)
+    # UserInfo.objects.create(name = 'lisa', password = '456', age = 23)
+    
+    # 2.删除数据
+    # UserInfo.objects.filter(id = 3).delete()
+    # UserInfo.objects.filter(id = 3).delete()
+    # UserInfo.objects.all().delete()
+    
+    # 3.获取数据
+    # data_list = UserInfo.objects.all()
+    # for obj in data_list:
+    #     print(obj.id, obj.name, obj.password)       
+    # data_list_1 = UserInfo.objects.filter(id=3)
+    # row_obj = UserInfo.objects.filter(id=3).first()
+    # print(data_list_1.id,)
+    
+    # 更新数据
+    # UserInfo.objects.all().update(password = '999')
+    # UserInfo.objects.filter(name = 'jhon').update(age = 18)
+   
     return HttpResponse('ORM OK')
 
-# def info_list(request):
-#     data_list = UserInfo.objects.all()
-#     return render(request, 'info_list.html', {'data_list':data_list})
+def info_list(request):
+    # 获取所有用户信息
+    data_list = UserInfo.objects.all()
+    return render(request, 'info_list.html', {'data_list':data_list})
+
+def info_add(request):
+    if request.method == 'GET':
+        return(request,'info_add.html')
+    
+    # 获取用户提交的数据
+    name = request.POST.get('name')
+    password = request.POST.get('pwd')
+    age = request.POST.get('age')
+    # 添加的数据库
+    UserInfo.objects.create(name = name, password = password, age = age)
+    # 自动跳转
+    return redirect('info/list/')

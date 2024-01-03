@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    <a href="/info/add">添加新用户</a>
     <table border = '1'>
         <thead>
             <tr>
@@ -13,15 +14,17 @@
                 <th>姓名</th>
                 <th>密码</th>
                 <th>年龄</th>
+                <th>操作</th>
             </tr>          
         </thead>
         <tbody>
         {% for obj in data_list %}
             <tr>
-                <td>{{obj.id}}</td>
-                <td>{{obj.name}}</td>
-                <td>{{obj.password}}</td>
-                <td>{{obj.age}}</td>
+                <td>{{ obj.id }}</td>
+                <td>{{ obj.name }}</td>
+                <td>{{ obj.password }}</td>
+                <td>{{ obj.age }}</td>
+                <td><a href="/info/delete?nid={{ obj.id }}">删除</a></td>
             </tr>
         {% endfor %}
         </tbody>

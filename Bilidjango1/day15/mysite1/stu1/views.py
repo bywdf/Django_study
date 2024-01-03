@@ -1,15 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from stu1.models import UserInfo
-from django.shortcuts import redirect
 
 # Create your views here.
-
-def user_list(request):
-    name = '小刘'
-    hobby = ['篮球','足球','游泳']
-    xinxi = {'adress':'linyi', 'age':20, 'sex':'男'}
-    return render(request, 'user_list.html',{'name':name, 'hobby':hobby, 'xinxi':xinxi})
 
 def login(request):
     if request.method == 'GET':
@@ -54,13 +47,18 @@ def info_list(request):
 
 def info_add(request):
     if request.method == 'GET':
-        return(request,'info_add.html')
+        return render(request,'info_add.html')
     
     # 获取用户提交的数据
-    name = request.POST.get('name')
+    name = request.POST.get('user')
     password = request.POST.get('pwd')
     age = request.POST.get('age')
     # 添加的数据库
     UserInfo.objects.create(name = name, password = password, age = age)
     # 自动跳转
-    return redirect('info/list/')
+    return redirect('/info/list')
+
+def info_delete(request):
+    nid = request.GET.get('nid')
+    UserInfo.objects.filter(id=nid).delete()
+    return redirect('/info/list')

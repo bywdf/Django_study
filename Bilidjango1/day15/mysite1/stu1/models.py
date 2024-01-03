@@ -5,7 +5,7 @@ class UserInfo(models.Model):
     name = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     age = models.IntegerField()
-    # 在已有数据表后面添加列
+    # 在已有数据表后面添加列:
     # phone = models.IntegerField(default=2)  添加默认值
     # data = models.IntegerField(null = True, blank = True) 允许这个值为空
 

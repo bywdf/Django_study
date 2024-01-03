@@ -1,0 +1,17 @@
+from django.db import models
+
+# Create your models here.
+class Department(models.Model):
+    '''部门表'''
+    # id = models.BigAutoField(verbose_name='ID', primary_key=True) # 自己写的主键，不写的话Django自己生产
+    # id = models.AutoField(verbose_name='ID', primary_key=True) 
+    title = models.CharField(verbose_name='标题', max_length=32)
+    
+    
+class UserInfo(models.Model):
+    '''员工表'''
+    name = models.CharField(verbose_name='姓名', max_length = 32)
+    password = models.CharField(verbose_name='密码', max_length = 64)
+    age = models.IntegerField(verbose_name='年龄')
+    account = models.DecimalField(verbose_name='账户余额', max_digits=10, decimal_places=2, default=0)
+    creat_time = models.DateTimeField(verbose_name='入职时间')

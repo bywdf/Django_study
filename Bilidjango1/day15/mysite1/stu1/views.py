@@ -53,7 +53,7 @@ def info_add(request):
     name = request.POST.get('user')
     password = request.POST.get('pwd')
     age = request.POST.get('age')
-    # 添加的数据库
+    # 添加到数据库
     UserInfo.objects.create(name = name, password = password, age = age)
     # 自动跳转
     return redirect('/info/list')

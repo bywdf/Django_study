@@ -30,7 +30,8 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a href="/depart/list/">部门管理</a></li>
-          <li><a href="#">用户管理</a></li>
+          <li><a href="/user/list/">用户管理</a></li>
+          <li><a href="#">靓号管理</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#">登录</a></li>
@@ -66,7 +67,7 @@
         </div>
   
         <!-- Table -->
-        <table class="table">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th>ID</th>
@@ -80,7 +81,7 @@
                 <th scope="row">{{ obj.id }}</th>
                 <td>{{ obj.title }}</td>
                 <td>
-                  <a class='btn  btn-xs' href="">编辑</a>
+                  <a class='btn btn-primary btn-xs' href="/depart/{{ obj.id }}/edit/">编辑</a>
                   <a class='btn btn-danger btn-xs' href="/depart/delete/?nid={{ obj.id }}">删除</a>
                 </td>
               </tr>

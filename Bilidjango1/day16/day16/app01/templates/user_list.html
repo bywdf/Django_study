@@ -13,8 +13,9 @@
       modelForm新建用户
     </a>
 
-  </div>
-  <div class="panel panel-default">
+</div>
+
+<div class="panel panel-default">
     <!-- Default panel contents -->
     <div class="panel-heading">
       <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
@@ -48,15 +49,15 @@
             <td>{{ obj.get_gender_display }}</td>  <!--模板里面括号会自动加的-->
             <td>{{ obj.depart.title }}</td>
             <td>
-              <a class='btn  btn-primary btn-xs' href="#">编辑</a>
-              <a class='btn btn-danger btn-xs' href="#">删除</a>
+              <a class='btn  btn-primary btn-xs' href="/user/{{ obj.id }}/edit/">编辑</a>
+              <a class='btn btn-danger btn-xs' href="/user/{{ obj.id }}/delete/">删除</a>
             </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
 
-  </div>
+</div>
 
 
 

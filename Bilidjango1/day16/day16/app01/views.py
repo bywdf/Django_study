@@ -129,10 +129,18 @@ def pretty_list(request):
     queryset = models.PrettyNum.objects.all().order_by('-level')
     return render(request, 'pretty_list.html', {'queryset':queryset})
 
-
+from django.core.validators import RegexValidator   # 引入正则
+from django.core.exceptions import ValidationError  # 引入报错
 class PrettyModelForm(forms.ModelForm):
+    # 验证方式一：
+    mobile = forms.CharField(
+        label='手机号',
+        validators=[RegexValidator(r'^1[3-9]\d{9}$', '手机号格式错误')]
+    )
+    
     class Meta:
         model = models.PrettyNum
+        # exclude = ['level']  这个是排除哪个字段
         fields = '__all__'
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -141,7 +149,16 @@ class PrettyModelForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': field.label,
             }
-            
+    
+    # 验证方式二   clean_mobile 自动生成的字段
+    # 钩子方法 比如检验存在不存在，正则表达式都可以
+    def clean_mobile(self):
+        txt_molile = self.cleaned_data["mobile"]  # 用户输入的字段
+        exists = models.PrettyNum.objects.filter(mobile=txt_molile).exists()
+        if exists:
+            raise ValidationError('手机号已存在')
+        else:
+            return txt_molile   
 
 def pretty_add(request):
     '''靓号添加'''
@@ -151,6 +168,7 @@ def pretty_add(request):
         return render(request, 'pretty_add.html', {'form': form})  
      
     form = PrettyModelForm(data=request.POST)
+    
     if form.is_valid():
         form.save()
         return redirect('/pretty/list/')
@@ -158,13 +176,45 @@ def pretty_add(request):
         return render(request, 'pretty_add.html', {'form': form}) 
     
     
+class PrettyEditModelForm(forms.ModelForm):
     
+    mobile = forms.CharField(
+        label='手机号',
+        validators=[RegexValidator(r'^1[3-9]\d{9}$', '手机号格式错误')]
+    )
+    
+    # mobile = forms.CharField(disabled=True, label='手机号') #不让修改显示
+    class Meta:
+        model = models.PrettyNum
+        fields = ['mobile', 'price', 'level', 'status']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs = {
+                'class': 'form-control',
+                'placeholder': field.label,
+            }   
+            
+    def clean_mobile(self):
+        
+        # 当前编辑行的id:self.instance.pk 
+        
+        txt_molile = self.cleaned_data["mobile"]  # 用户输入的字段
+        # 排除自己以外的是不是存在
+        exists = models.PrettyNum.objects.exclude(id=self.instance.pk).filter(mobile=txt_molile).exists()    
+        if exists:
+            raise ValidationError('手机号已存在')
+        else:
+            return txt_molile     
+              
+            
 def pretty_edit(request, nid):
-    '''编辑靓号'''
+    '''编辑靓号，（继承原来的也可以，重写字段）
+    只允许用户写价格、级别、状态的话需要另写一个只有这三个字段的modelform'''
     row_object = models.PrettyNum.objects.filter(id=nid).first()
     
     if request.method =='GET':
-        form = PrettyModelForm(instance=row_object)
+        form = PrettyEditModelForm(instance=row_object)
         return render(request, 'pretty_edit.html', {'form': form})
     
     form = PrettyModelForm(data=request.POST, instance=row_object)
@@ -173,3 +223,10 @@ def pretty_edit(request, nid):
         return redirect('/pretty/list/')
     else:
         return render(request, 'pretty_edit.html', {'form': form})
+    
+    
+    
+def pretty_delete(request, nid):
+    '''删除靓号'''
+    models.PrettyNum.objects.filter(id=nid).delete()
+    return redirect('/pretty/list/')

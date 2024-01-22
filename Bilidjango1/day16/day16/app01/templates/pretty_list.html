@@ -37,7 +37,7 @@
           <td>{{ obj.get_status_display }}</td>  <!--模板里面括号会自动加的-->
           <td>
             <a class='btn  btn-primary btn-xs' href="/pretty/{{ obj.id }}/edit/">编辑</a>
-            <a class='btn btn-danger btn-xs' href="#">删除</a>
+            <a class='btn btn-danger btn-xs' href="/pretty/{{ obj.id }}/delete/">删除</a>
           </td>
         </tr>
       {% endfor %}

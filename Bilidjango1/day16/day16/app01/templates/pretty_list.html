@@ -2,11 +2,24 @@
 
 {% block content %}
 
-<div style='margin-bottom: 10px'>
+<div style='margin-bottom: 10px' class='clearfix'>
     <a class='btn btn-success' href="/pretty/add/">
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
       新建靓号
     </a>
+
+   <!-- /input-group -->
+    <div style='float: right; width: 300px;'>
+      <form method='get'>
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">查询</button>
+          </span>
+        </div>
+      </form>
+      <!-- /input-group -->
+    </div>
 </div>
 
 <div class="panel panel-default">

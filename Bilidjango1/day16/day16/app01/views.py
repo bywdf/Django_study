@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
 from app01 import models
 
+from django import forms
+
+from django.core.validators import RegexValidator   # 引入正则
+from django.core.exceptions import ValidationError  # 引入报错
+
 # Create your views here.
 
 
@@ -56,7 +61,6 @@ def user_add(request):
     return render(request,'user_add.html', context)
 
 
-from django import forms
 # 用modelform，先写一个类
 class UserModelForm(forms.ModelForm):
     # 设置最小长度
@@ -122,15 +126,37 @@ def user_delete(request, nid):
     return redirect('/user/list/')
 
 
+# '''数据库查询'''
+# models.PrettyNum.objects.filter(mobile='18553976921', id=2)
+# # 空字典等于查询所有
+# data_dict = {'mobile':'18553976921', 'id':2}
+# models.PrettyNum.objects.filter(**data_dict)
+
+# # 针对数字
+# models.PrettyNum.objects.filter(id=2)          # 等于2
+# models.PrettyNum.objects.filter(id__gt=2)      # 大于2
+# models.PrettyNum.objects.filter(id__gte=2)     # 大于等于2
+# models.PrettyNum.objects.filter(id__lt=2)     # 小于2
+# models.PrettyNum.objects.filter(id__lte=2)     # 小于等于2
+# # 针对字符串
+# models.PrettyNum.objects.filter(mobile__startswith='135')  # 以135开头
+# models.PrettyNum.objects.filter(mobile__endswith='666')  # 以135结尾
+# models.PrettyNum.objects.filter(mobile__contains='6')  # 包含6筛选出来
+
 def pretty_list(request):
     '''靓号列表'''
     
+    data_dict = {}
+    value = request.GET.get('q')
+    if value:
+        data_dict ['mobile__contains']= value  
+    # models.PrettyNum.objects.filter(**data_dict)
+     
     # select * from 表 order by id desc/asc     -id/id
-    queryset = models.PrettyNum.objects.all().order_by('-level')
+    queryset = models.PrettyNum.objects.filter(**data_dict).order_by('-level')
     return render(request, 'pretty_list.html', {'queryset':queryset})
 
-from django.core.validators import RegexValidator   # 引入正则
-from django.core.exceptions import ValidationError  # 引入报错
+
 class PrettyModelForm(forms.ModelForm):
     # 验证方式一：
     mobile = forms.CharField(
@@ -223,10 +249,12 @@ def pretty_edit(request, nid):
         return redirect('/pretty/list/')
     else:
         return render(request, 'pretty_edit.html', {'form': form})
-    
-    
+        
     
 def pretty_delete(request, nid):
     '''删除靓号'''
     models.PrettyNum.objects.filter(id=nid).delete()
     return redirect('/pretty/list/')
+
+
+

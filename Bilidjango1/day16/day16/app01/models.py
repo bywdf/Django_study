@@ -52,3 +52,4 @@ class PrettyNum(models.Model):
         (2, '未售'),
     )
     status = models.SmallIntegerField(verbose_name='状态', choices= status_choices, default=2)
+

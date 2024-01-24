@@ -147,14 +147,14 @@ def pretty_list(request):
     '''靓号列表'''
     
     data_dict = {}
-    value = request.GET.get('q')
-    if value:
-        data_dict ['mobile__contains']= value  
+    search = request.GET.get('q','')
+    if search:
+        data_dict ['mobile__contains']= search 
     # models.PrettyNum.objects.filter(**data_dict)
      
     # select * from 表 order by id desc/asc     -id/id
     queryset = models.PrettyNum.objects.filter(**data_dict).order_by('-level')
-    return render(request, 'pretty_list.html', {'queryset':queryset})
+    return render(request, 'pretty_list.html', {'queryset':queryset, 'search': search})
 
 
 class PrettyModelForm(forms.ModelForm):

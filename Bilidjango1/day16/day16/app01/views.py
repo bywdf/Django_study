@@ -146,14 +146,28 @@ def user_delete(request, nid):
 def pretty_list(request):
     '''靓号列表'''
     
+    # for i in range(300):
+    #     models.PrettyNum.objects.create(mobile = '18152641135',
+    #                                    price = 10,
+    #                                    level = 1,
+    #                                    status = 1
+    #                                    )
+    # models.PrettyNum.objects.filter(id__gte=320).delete()
     data_dict = {}
     search = request.GET.get('q','')
     if search:
         data_dict ['mobile__contains']= search 
     # models.PrettyNum.objects.filter(**data_dict)
-     
+    
+    
+    # 根据用户想要访问的页码，计算出起止位置
+    page = int(request.GET.get('page', 1))
+    page_size = 10
+    start = (page -1) * page_size
+    end = page * page_size
+    
     # select * from 表 order by id desc/asc     -id/id
-    queryset = models.PrettyNum.objects.filter(**data_dict).order_by('-level')
+    queryset = models.PrettyNum.objects.filter(**data_dict).order_by('-level')[start:end]
     return render(request, 'pretty_list.html', {'queryset':queryset, 'search': search})
 
 

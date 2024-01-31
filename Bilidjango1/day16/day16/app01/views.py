@@ -6,6 +6,8 @@ from django import forms
 from django.core.validators import RegexValidator   # 引入正则
 from django.core.exceptions import ValidationError  # 引入报错
 
+from django.utils.safestring import mark_safe
+
 # Create your views here.
 
 
@@ -152,6 +154,7 @@ def pretty_list(request):
     #                                    level = 1,
     #                                    status = 1
     #                                    )
+    
     # models.PrettyNum.objects.filter(id__gte=320).delete()
     data_dict = {}
     search = request.GET.get('q','')
@@ -162,13 +165,75 @@ def pretty_list(request):
     
     # 根据用户想要访问的页码，计算出起止位置
     page = int(request.GET.get('page', 1))
-    page_size = 10
+    page_size = 10  # 每页显示数据
     start = (page -1) * page_size
     end = page * page_size
     
+    # 数据总条数
+    total_count = models.PrettyNum.objects.filter(**data_dict).order_by('-level').count()
     # select * from 表 order by id desc/asc     -id/id
     queryset = models.PrettyNum.objects.filter(**data_dict).order_by('-level')[start:end]
-    return render(request, 'pretty_list.html', {'queryset':queryset, 'search': search})
+    # math.ceil() 向上取整更好
+    total_page_count, div = divmod(total_count, page_size)
+    if div:
+        total_page_count += 1
+        
+    # 计算出，显示当前页的前5页，后5页
+    plus = 5
+    if total_page_count <= 2 * plus + 1:
+        # 数据库中数据比较少，都没有达到11页
+        start_page = 1
+        end_page = total_page_count
+    else:
+        # 数据库中的数据比较多 > 11 页
+        
+        # 当页前小于5(处理小的极值)
+        if page <= plus:
+            start_page = 1
+            end_page = 2*plus
+        else:
+            # 当前页 > 5
+            # 当前页+5 > 总页面
+            if (page + plus) > total_page_count:
+                start_page = total_page_count - 2*plus
+                end_page = total_page_count
+            else:
+                start_page = page - plus
+                end_page = page + plus
+    # 用elif改更美观
+        
+    # 页码
+    page_str_list = []
+    
+    
+    #首页
+    page_str_list.append('<li><a href="?page={}">首页</a></li>'.format(1))
+    # 上一页
+    if page > 1:
+        prev = ele = '<li><a href="?page={}">上一页</a></li>'.format(page-1)
+    else:
+        prev = ele = '<li><a href="?page={}">上一页</a></li>'.format(1)
+    page_str_list.append(prev)
+    
+    for i in range(start_page, end_page + 1):
+        if i == page:
+            ele = '<li class="active"><a href="?page={}">{}</a></li>'.format(i, i)
+        else:
+            ele = '<li><a href="?page={}">{}</a></li>'.format(i, i)
+        page_str_list.append(ele)
+    
+    # 下一页  
+    if page < total_page_count:
+        prev = ele = '<li><a href="?page={}">下一页</a></li>'.format(page+1)
+    else:
+        prev = ele = '<li><a href="?page={}">下一页</a></li>'.format(total_page_count)
+    page_str_list.append(prev)
+    #  尾页
+    page_str_list.append('<li><a href="?page={}">尾页</a></li>'.format(total_page_count))    
+    
+    page_string = mark_safe("".join(page_str_list)) 
+
+    return render(request, 'pretty_list.html', {'queryset':queryset, 'search': search, 'page_string': page_string})
 
 
 class PrettyModelForm(forms.ModelForm):
@@ -199,6 +264,7 @@ class PrettyModelForm(forms.ModelForm):
             raise ValidationError('手机号已存在')
         else:
             return txt_molile   
+
 
 def pretty_add(request):
     '''靓号添加'''

@@ -12,7 +12,7 @@
     <div style='float: right; width: 300px;'>
       <form method='get'>
         <div class="input-group">
-          <input type="text" name="q" class="form-control" value='{{ search }}' placeholder="请输入想要数字">
+          <input type="text" name="q" class="form-control" value='{{ search_data }}' placeholder="请输入想要数字">
           <span class="input-group-btn">
             <button class="btn btn-default" type="submit">查询</button>
           </span>
@@ -62,15 +62,6 @@
 <div class="clearfix" >
       <ul class="pagination" style="float:left;">   
       {{ page_string }}
-      <li> 
-          <form style='float: left; margin-left: -1px;' method='get'>
-                <input name='page'
-                    style='position: relative; float:left; display: inline-block; width: 80px; border-radius: 0;'
-                    type="text" class='form-control' placeholder='页码'>
-                <button style='border-radius: 0;' type="submit" class='btn btn-default'>跳转</button>
-          </form>
-      </li>
-
     </ul>
 </div>
 

@@ -66,7 +66,7 @@ def user_add(request):
 # 用modelform，先写一个类
 class UserModelForm(forms.ModelForm):
     # 设置最小长度
-    name = forms.CharField(min_length=3, label='用户名') 
+    name = forms.CharField(min_length=2, label='用户名') 
     class Meta:
         model = models.UserInfo
         # fields = ['name', 'password', 'age', 'account', 'gender','creat_time', 'depart']
@@ -145,6 +145,8 @@ def user_delete(request, nid):
 # models.PrettyNum.objects.filter(mobile__endswith='666')  # 以135结尾
 # models.PrettyNum.objects.filter(mobile__contains='6')  # 包含6筛选出来
 
+
+from app01.utils.pagination import Pagination
 def pretty_list(request):
     '''靓号列表'''
     
@@ -157,83 +159,22 @@ def pretty_list(request):
     
     # models.PrettyNum.objects.filter(id__gte=320).delete()
     data_dict = {}
-    search = request.GET.get('q','')
-    if search:
-        data_dict ['mobile__contains']= search 
+    search_data = request.GET.get('q','')
+    if search_data:
+        data_dict ['mobile__contains']= search_data 
     # models.PrettyNum.objects.filter(**data_dict)
     
-    
-    # 根据用户想要访问的页码，计算出起止位置
-    page = int(request.GET.get('page', 1))
-    page_size = 10  # 每页显示数据
-    start = (page -1) * page_size
-    end = page * page_size
-    
-    # 数据总条数
-    total_count = models.PrettyNum.objects.filter(**data_dict).order_by('-level').count()
-    # select * from 表 order by id desc/asc     -id/id
-    queryset = models.PrettyNum.objects.filter(**data_dict).order_by('-level')[start:end]
-    # math.ceil() 向上取整更好
-    total_page_count, div = divmod(total_count, page_size)
-    if div:
-        total_page_count += 1
-        
-    # 计算出，显示当前页的前5页，后5页
-    plus = 5
-    if total_page_count <= 2 * plus + 1:
-        # 数据库中数据比较少，都没有达到11页
-        start_page = 1
-        end_page = total_page_count
-    else:
-        # 数据库中的数据比较多 > 11 页
-        
-        # 当页前小于5(处理小的极值)
-        if page <= plus:
-            start_page = 1
-            end_page = 2*plus
-        else:
-            # 当前页 > 5
-            # 当前页+5 > 总页面
-            if (page + plus) > total_page_count:
-                start_page = total_page_count - 2*plus
-                end_page = total_page_count
-            else:
-                start_page = page - plus
-                end_page = page + plus
-    # 用elif改更美观
-        
-    # 页码
-    page_str_list = []
-    
-    
-    #首页
-    page_str_list.append('<li><a href="?page={}">首页</a></li>'.format(1))
-    # 上一页
-    if page > 1:
-        prev = ele = '<li><a href="?page={}">上一页</a></li>'.format(page-1)
-    else:
-        prev = ele = '<li><a href="?page={}">上一页</a></li>'.format(1)
-    page_str_list.append(prev)
-    
-    for i in range(start_page, end_page + 1):
-        if i == page:
-            ele = '<li class="active"><a href="?page={}">{}</a></li>'.format(i, i)
-        else:
-            ele = '<li><a href="?page={}">{}</a></li>'.format(i, i)
-        page_str_list.append(ele)
-    
-    # 下一页  
-    if page < total_page_count:
-        prev = ele = '<li><a href="?page={}">下一页</a></li>'.format(page+1)
-    else:
-        prev = ele = '<li><a href="?page={}">下一页</a></li>'.format(total_page_count)
-    page_str_list.append(prev)
-    #  尾页
-    page_str_list.append('<li><a href="?page={}">尾页</a></li>'.format(total_page_count))    
-    
-    page_string = mark_safe("".join(page_str_list)) 
+    queryset = models.PrettyNum.objects.filter(**data_dict).order_by('-level')
 
-    return render(request, 'pretty_list.html', {'queryset':queryset, 'search': search, 'page_string': page_string})
+    page_object = Pagination(request, queryset)
+
+    context = {
+        'search_data':search_data,
+        'queryset':page_object.page_queryset,     # 分页数据
+        'page_string': page_object.html()         # 页码
+    }
+    
+    return render(request, 'pretty_list.html', context)
 
 
 class PrettyModelForm(forms.ModelForm):

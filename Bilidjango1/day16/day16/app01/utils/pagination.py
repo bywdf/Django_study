@@ -16,6 +16,7 @@ def pretty_list(request):
     }
     
     return render(request, 'pretty_list.html', context)
+
 # 在HTML页面中：
 
     {% for obj in queryset %}

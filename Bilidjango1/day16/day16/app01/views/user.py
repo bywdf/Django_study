@@ -35,9 +35,9 @@ def user_form_add(request):
         # print(form.cleaned_data)
         form.save()
         return redirect('/user/list/')
-    else:
-        # print(form.errors) 在页面上显示错误信息
-        return render(request, 'user_form_add.html', {'form':form})
+    
+    # print(form.errors) 在页面上显示错误信息
+    return render(request, 'user_form_add.html', {'form':form})
     # 针对数据库的操作用ModesForm。其他的用Form操作，比如登录，
 
 
@@ -57,8 +57,7 @@ def user_edit(request, nid):
         # form.instance.字段名=值，用户输入以外增加某个值
         form.save()
         return redirect('/user/list/')
-    else:
-        return render(request, 'user_form_add.html', {'form':form})
+    return render(request, 'user_form_add.html', {'form':form})
 
 
 def user_delete(request, nid):

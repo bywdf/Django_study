@@ -66,8 +66,7 @@ def pretty_add(request):
     if form.is_valid():
         form.save()
         return redirect('/pretty/list/')
-    else:
-        return render(request, 'pretty_add.html', {'form': form}) 
+    return render(request, 'pretty_add.html', {'form': form}) 
     
             
 def pretty_edit(request, nid):
@@ -83,8 +82,7 @@ def pretty_edit(request, nid):
     if form.is_valid():
         form.save()
         return redirect('/pretty/list/')
-    else:
-        return render(request, 'pretty_edit.html', {'form': form})
+    return render(request, 'pretty_edit.html', {'form': form})
         
     
 def pretty_delete(request, nid):

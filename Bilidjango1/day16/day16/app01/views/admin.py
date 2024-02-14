@@ -12,6 +12,9 @@ from app01.utils.encrypt import md5
 def admin_list(request):
     '''管理员列表'''
     
+    # info_dict = request.session['info'] 获取登录信息
+    # info_dict[id]
+    
     # 构造搜索
     data_dict = {}
     search_data = request.GET.get('q','')

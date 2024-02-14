@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse, redirect
 from django import forms
 
 from app01 import models
@@ -47,5 +47,14 @@ def login(request):
         
         # 用户名和密码正确
         # 网站生成随机字符串；写到用户浏览器的cookie中；写入到session中；
+        request.session['info'] = {'id':admin_object.id, 'name':admin_object.username}
         
+        return redirect("/admin/list/")
     return render(request, 'login.html', {'form': form})
+
+
+def logout(request):
+    '''注销'''
+
+    request.session.clear()
+    return redirect('/login/')

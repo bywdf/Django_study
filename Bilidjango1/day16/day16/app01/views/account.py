@@ -62,7 +62,8 @@ def login(request):
         # 用户名和密码正确
         # 网站生成随机字符串；写到用户浏览器的cookie中；写入到session中；
         request.session['info'] = {'id': admin_object.id, 'name': admin_object.username}
-
+        request.session.set_expiry(60*60*24*3) # 设置session的过期时间为3天
+        
         return redirect("/admin/list/")
     return render(request, 'login.html', {'form': form})
 
@@ -75,8 +76,8 @@ def image_code(request):
 
     # 写入到自己的session中，以便后续获取验证码再进行校验
     request.session['image_code'] = code_string
-    # 给Session设置一个120秒超时
-    request.session.set_expiry(120)
+    # 给Session设置一个60秒超时
+    request.session.set_expiry(60)
 
     stream = BytesIO()
     img.save(stream, 'png')

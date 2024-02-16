@@ -49,4 +49,5 @@ urlpatterns = [
     
     path('login/', account.login),
     path('logout/', account.logout),
+    path('image/code/', account.image_code),
 ]

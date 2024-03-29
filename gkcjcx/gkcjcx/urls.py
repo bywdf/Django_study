@@ -20,6 +20,6 @@ from cjcx import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('chaxun/', views.chaxun),
-    path('jieguo/', views.jieguo),
+    path('list/', views.list),
+    path('jieguo/<int:nid>/', views.jieguo),
 ]

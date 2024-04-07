@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('list/', views.list),
     path('jieguo/<int:nid>/', views.jieguo),
+    path('add/', views.add),
+    path('delete', views.delete),
 ]

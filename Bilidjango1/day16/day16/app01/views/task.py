@@ -1,4 +1,6 @@
+import json
 from django.shortcuts import render, HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -12,4 +14,9 @@ def task_ajax(request):
     ''''''
     print(request.GET)
     print(request.POST)
-    return HttpResponse('成功了')
+    
+    data_dict = {'status': True, 'data': [11,22,33,44]}
+    return HttpResponse(json.dumps(data_dict))
+    
+    # return HttpResponse('成功了')
+    # return JsonResponse(data_dict)

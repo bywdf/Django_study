@@ -13,6 +13,7 @@ def check_code(width=120, height=30, char_length=5, font_file='Monaco.ttf', font
         :return:
         """
         return chr(random.randint(65, 90))
+        # return str(random.randint(0, 9)) 随机数字
  
     def rndColor():
         """

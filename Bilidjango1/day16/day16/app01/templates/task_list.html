@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>任务列表</h1>
+
+        <h3>实例1</h3>
+        <input id='btn1' type="button" class='btn btn-primary' value='点击'>
+    </div>
+{% endblock content %}
+
+{% block js %}
+<script>
+    $(function(){
+        // 页面框架加载完成之后代码自动执行
+        bindBtn1Evrnt();
+    })
+
+    function bindBtn1Evrnt(){
+        $('#btn1').click(function(){
+            $.ajax({
+                url:'/task/ajax/',
+                type:'post',
+                data:{
+                    n1:123,
+                    n2:456
+                },success:function(res){
+                    console.log(res);
+                }
+            })
+        })
+    }
+
+</script>
+{% endblock js %}

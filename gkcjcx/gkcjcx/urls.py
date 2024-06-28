@@ -23,5 +23,5 @@ urlpatterns = [
     path('list/', views.list),
     path('jieguo/<int:nid>/', views.jieguo),
     path('add/', views.add),
-    path('delete', views.delete),
+    path('delete/', views.delete),
 ]

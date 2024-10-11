@@ -17,7 +17,7 @@ def pretty_list(request):
     
     return render(request, 'pretty_list.html', context)
 
-# 在HTML页面中：
+# 在HTML页面中for循环的table标签后面添加ul：
 
     {% for obj in queryset %}
         {{obj.xx}}

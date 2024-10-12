@@ -8,24 +8,22 @@
             <div class="panel-body">
 
                 <form id='formAdd'>
-                <div class='clearfix'>
-                    {% for field in form %}
-                    <div class='col-xs-6'>
-                        <div class='form-group' style='position: relative;margin-bottom: 25px;'>
-                            <label>{{ field.label }}</label>
-                            {{ field }}
-                            <span class='error-msg' style='color: red;position: absolute;'></span>
+                    <div class='clearfix'>
+                        {% for field in form %}
+                            <div class='col-xs-6'>
+                                <div class='form-group' style='position: relative;margin-bottom: 25px;'>
+                                    <label>{{ field.label }}</label>
+                                    {{ field }}
+                                    <span class='error-msg' style='color: red;position: absolute;'></span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class='col-xs-12'>
+                            <button id='btnAdd' type="button" class='btn btn-primary'>提交</button>
                         </div>
-                    </div>
-                    {% endfor %}
-                    <div class='col-xs-12'>
-                        <button id='btnAdd' type="button" class='btn btn-primary'>提交</button>
-                    </div>
-            </div>
-                
+                    </div>  
                 </form>
             
-
             </div>
         </div>
 

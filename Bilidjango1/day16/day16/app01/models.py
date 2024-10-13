@@ -85,8 +85,8 @@ class Order(models.Model):
     price = models.IntegerField(verbose_name='价格')
     
     status_choices = (
-        (1,'待支付'),
-        (2,'已支付'),
+        (1, '待支付'),
+        (2, '已支付'),
     )
     status = models.SmallIntegerField(verbose_name='状态', choices= status_choices, default=1)
     admin = models.ForeignKey(verbose_name='管理员', to='Admin', on_delete=models.CASCADE)

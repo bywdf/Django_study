@@ -28,9 +28,6 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                            <div class='col-xs-12'>
-                                <button id='btnAdd' type="button" class='btn btn-primary'>提 交</button>
-                            </div>
                         </div>  
                     </form>    
                 </div>
@@ -63,14 +60,25 @@
         function bindBtnSaveEvent(){
             $('#btnSave').click(function(){
                 //alert('保存成功');
+                // 清除错误信息
+                $('.error-msg').empty();
 
+                // 向后台提交数据
                 $.ajax({
                     url:"/order/add/",
                     type:"post",
-                    data:$('#formAdd').serialize,
+                    data:$('#formAdd').serialize(),
                     dataType:'JSON',
                     success:function(res){
-                        console.log(res);
+                        // console.log(res);
+                       if(res.status){
+                            alert('创建成功');
+                        }else{
+                            //把错误信息显示在对话框中
+                            $.each(res.error, function(name,errorList){
+                                $('#id_'+name).next().text(errorList[0]);
+                            })
+                        } 
                     }
                 })
 

@@ -1,6 +1,9 @@
 '''
 自定义的分页组件,以后如果想要使用这个分页组件，你需要做如下几件事：
 
+# 导入
+from app01.utils.pagination import Pagination
+
 # 在试图函数中
 def pretty_list(request):
 
@@ -11,7 +14,7 @@ def pretty_list(request):
     page_object = Pagination(request, queryset)
 
     context = {
-        'queryset':page_object.page_queryset,     # 分页数据
+        'queryset': page_object.page_queryset,     # 分页数据
         'page_string': page_object.html()         # 生成页码
     }
     

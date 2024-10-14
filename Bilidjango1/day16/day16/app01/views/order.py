@@ -7,6 +7,7 @@ from django.http import JsonResponse
 
 from app01 import models
 from app01.utils.bootstrap import BootStrapModelForm
+from app01.utils.pagination import Pagination
 
 
 class OrderModelForm(BootStrapModelForm):
@@ -19,7 +20,17 @@ class OrderModelForm(BootStrapModelForm):
         
 def order_list(request):
     form = OrderModelForm()
-    return render(request, 'order_list.html', {'form': form})
+    queryset = models.Order.objects.all().order_by('-id')
+    
+    page_object = Pagination(request, queryset)
+
+    context = {
+        'form': form,
+        'queryset': page_object.page_queryset,     # 分页数据
+        'page_string': page_object.html()         # 生成页码
+    }
+    
+    return render(request, 'order_list.html', context)
 
 
 @csrf_exempt

@@ -29,7 +29,7 @@
               </thead>
               <tbody>    
                 {% for obj in queryset %}
-                  <tr>
+                  <tr uid="{{ obj.id }}">
                     <td>{{ obj.id }}</td>
                     <td>{{ obj.oid }}</td>
                     <td>{{ obj.title }}</td>
@@ -37,7 +37,7 @@
                     <td>{{ obj.get_status_display }}</td>
                     <td>{{ obj.admin }}</td>
                     <td>
-                      <a class='btn  btn-primary btn-xs' href="#">编辑</a>
+                      <input type="button" class='btn btn-primary btn-xs btn-edit' value='编辑'>
                       <input uid="{{ obj.id }}" class='btn btn-danger btn-xs btn-delete' type="button" value="删除">
                     </td>
                   </tr>
@@ -183,7 +183,20 @@
                     // res是ajax请求后台后回调的获取的json数据
                     success:function(res){
                         if(res.status){
-                            alert('删除成功');
+                            // alert('删除成功');
+
+                            // 隐藏删除框
+                            // $("#deleteModal").modal('hide');
+
+                            // 在页面上将当前一行数据删除（js）
+                            // $("tr[uid='" + DELETE_ID + "']").remove();
+
+                            // 要删除的ID置空
+                            //  DELETE_ID = 0;   
+                            
+                            // 更简单的思路，页面刷新
+                            location.reload();
+
                         }else{
                             //删除失败
                             alert(res.error);

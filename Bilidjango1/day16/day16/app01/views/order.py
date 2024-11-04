@@ -64,3 +64,7 @@ def order_delete(request):
 
     models.Order.objects.filter(id=uid).delete()
     return JsonResponse({'status': True})
+
+def order_edit(request):
+    '''编辑订单'''
+    pass

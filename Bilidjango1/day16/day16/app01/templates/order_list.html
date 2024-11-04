@@ -112,6 +112,7 @@
             bindBtnSaveEvent();
             bindBtnDeleteEvent();
             bindBtnConfirmDeleteEvent();
+            bindBtnEditEvent();
         })
 
         function bindBtnAddEvent(){
@@ -203,6 +204,14 @@
                         }
                     }
                 })
+            });
+        }
+
+        function bindBtnEditEvent(){
+            $('.btn-edit').click(function(){
+                // 显示编辑对话框
+                $('#editModal').modal('show');
+                // 获取当前行ID，
             });
         }
 

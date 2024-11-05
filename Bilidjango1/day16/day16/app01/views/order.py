@@ -65,6 +65,39 @@ def order_delete(request):
     models.Order.objects.filter(id=uid).delete()
     return JsonResponse({'status': True})
 
+
+def order_detail(request):
+    '''根据ID获取订单详细'''
+    # 方式1
+    '''
+    uid = request.GET.get("uid")
+    row_object = models.Order.objects.filter(id=uid).first()
+    if not row_object:
+        return JsonResponse({"status":False, 'error':"数据不存在"})
+    
+    # 从数据库中获取到一个对象row_object
+    result = {
+        'status': True,
+        'data':{
+            'title': row_object.title,
+            'price': row_object.price,
+            'status': row_object.status,
+        }
+    }
+    return JsonResponse(result)
+    '''
+    
+    # 方式2
+    uid = request.GET.get("uid")
+    row_dict = models.Order.objects.filter(id=uid).values('title','price','status').first()
+    if not row_dict:
+        return JsonResponse({"status":False, 'error':"数据不存在"})
+    result = {
+        'status': True,
+        'data': row_dict,
+    }
+    return JsonResponse(result)
+    
 def order_edit(request):
     '''编辑订单'''
     pass

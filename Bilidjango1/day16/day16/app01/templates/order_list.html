@@ -37,7 +37,7 @@
                     <td>{{ obj.get_status_display }}</td>
                     <td>{{ obj.admin }}</td>
                     <td>
-                      <input type="button" class='btn btn-primary btn-xs btn-edit' value='编辑'>
+                      <input uid="{{ obj.id }}" type="button" class='btn btn-primary btn-xs btn-edit' value='编辑'>
                       <input uid="{{ obj.id }}" class='btn btn-danger btn-xs btn-delete' type="button" value="删除">
                     </td>
                   </tr>
@@ -52,7 +52,7 @@
             
         </div>
           
-        <!-- 新建订单(模态对话框) -->
+        <!-- 新建/编辑 订单(模态对话框) -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -117,6 +117,10 @@
 
         function bindBtnAddEvent(){
             $('#btnAdd').click(function(){
+                // 清空对话框中的数据
+                $("#formAdd")[0].reset();
+
+                $("#myModalLabel").text("新建");
                 // 点击新建按钮，显示对话框
                 $('#myModal').modal('show');
             });
@@ -209,9 +213,39 @@
 
         function bindBtnEditEvent(){
             $('.btn-edit').click(function(){
-                // 显示编辑对话框
-                $('#editModal').modal('show');
-                // 获取当前行ID，
+
+                // 清空对话框中的数据
+                $("#formAdd")[0].reset();
+                
+                var uid = $(this).attr('uid');
+
+                
+                // 发送Ajax去后端获取当前行的相关数据  /order/detail/?uid=123
+                $.ajax({
+                        url:"/order/detail/",
+                        type:'get',
+                        data:{
+                            uid: uid
+                        },
+                        dataType:'JSON',
+                        success: function(res){
+                            if(res.status){
+                                // 将数据赋值到对话框中的标签
+                                $.each(res.data, function(name, value){
+                                    $("#id_" + name).val(value);
+                                });
+
+                                // 修改对话框标题
+                                $("#myModalLabel").text("编辑");
+
+                                // 点击编辑，显示对话框
+                                $('#myModal').modal('show');
+
+                            }else{
+                                alert(res.error);
+                            }
+                        }
+                    })
             });
         }
 

@@ -98,6 +98,4 @@ def order_detail(request):
     }
     return JsonResponse(result)
     
-def order_edit(request):
-    '''编辑订单'''
-    pass
+    

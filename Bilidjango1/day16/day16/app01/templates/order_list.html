@@ -106,6 +106,7 @@
     <script type='text/javascript'>
 
         var DELETE_ID;
+        var EDIT_ID;
 
         $(function(){
             bindBtnAddEvent();
@@ -117,6 +118,9 @@
 
         function bindBtnAddEvent(){
             $('#btnAdd').click(function(){
+                // 将在编辑的ID设置为空
+                EDIT_ID = undefined;
+
                 // 清空对话框中的数据
                 $("#formAdd")[0].reset();
 
@@ -218,6 +222,7 @@
                 $("#formAdd")[0].reset();
                 
                 var uid = $(this).attr('uid');
+                EDIT_ID = uid; 
 
                 
                 // 发送Ajax去后端获取当前行的相关数据  /order/detail/?uid=123

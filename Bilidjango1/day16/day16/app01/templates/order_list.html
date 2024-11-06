@@ -136,36 +136,79 @@
                 // 清除错误信息
                 $('.error-msg').empty();
 
-                // 向后台提交数据
-                $.ajax({
-                    url:"/order/add/",
-                    type:"post",
-                    data:$('#formAdd').serialize(),
-                    dataType:'JSON',
-                    success:function(res){
-                        // console.log(res);
-                       if(res.status){
-                            alert('创建成功');
-                            // 清空表单 $('#formAdd')是jQuery对象-->$('#formAdd')[0]是DOM对象
-                            $('#formAdd')[0].reset();
+                if (EDIT_ID){
+                    // 编辑
+                    doEdit();
+                } else {
+                    // 添加
+                    doAdd();
+                }
 
-                            // 关闭对话框
-                            $("#myModal").modal('hide');
-
-                            // 刷新页面
-                            location.reload();
-
-                        }else{
-                            //把错误信息显示在对话框中
-                            $.each(res.error, function(name,errorList){
-                                $('#id_'+name).next().text(errorList[0]);
-                            })
-                        } 
-                    }
-                })
+                
 
             });
         }
+
+        function doEdit(){
+            $.ajax({
+                url:"/order/edit/" + "?uid=" + EDIT_ID,      // -> /order/edit/?uid=123
+                type:"post",
+                data:$('#formAdd').serialize(),
+                dataType:'JSON',
+                success:function(res){
+                    // console.log(res);
+                   if(res.status){
+
+                        // 清空表单 $('#formAdd')是jQuery对象-->$('#formAdd')[0]是DOM对象
+                        $('#formAdd')[0].reset();
+
+                        // 关闭对话框
+                        $("#myModal").modal('hide');
+
+                        // 刷新页面
+                        location.reload();
+
+                    }else{
+                        //把错误信息显示在对话框中
+                        $.each(res.error, function(name,errorList){
+                            $('#id_'+name).next().text(errorList[0]);
+                        })
+                    } 
+                }
+            })
+        }
+
+        function doAdd(){
+            // 向后台提交数据
+            $.ajax({
+                url:"/order/add/",
+                type:"post",
+                data:$('#formAdd').serialize(),
+                dataType:'JSON',
+                success:function(res){
+                    // console.log(res);
+                   if(res.status){
+                        alert('创建成功');
+                        // 清空表单 $('#formAdd')是jQuery对象-->$('#formAdd')[0]是DOM对象
+                        $('#formAdd')[0].reset();
+
+                        // 关闭对话框
+                        $("#myModal").modal('hide');
+
+                        // 刷新页面
+                        location.reload();
+
+                    }else{
+                        //把错误信息显示在对话框中
+                        $.each(res.error, function(name,errorList){
+                            $('#id_'+name).next().text(errorList[0]);
+                        })
+                    } 
+                }
+            })
+        }
+
+
 
         function bindBtnDeleteEvent(){
             $('.btn-delete').click(function(){

@@ -3,8 +3,8 @@
 {% block content %}
     <div class="container">
         <div style='margin-bottom:10px;'>
-            <input type="button" value="新建订单1" class='btn btn-primary' data-toggle="modal" data-target="#myModal">
-            <input id='btnAdd' type="button" value="新建订单2" class='btn btn-primary'>
+            <input type="button" value="新建订单1" class='btn btn-success' data-toggle="modal" data-target="#myModal">
+            <input id='btnAdd' type="button" value="新建订单2" class='btn btn-success'>
         </div>
 
         <div class="panel panel-default">
@@ -121,6 +121,9 @@
                 // 将在编辑的ID设置为空
                 EDIT_ID = undefined;
 
+                // 清除错误信息
+                $('.error-msg').empty();
+
                 // 清空对话框中的数据
                 $("#formAdd")[0].reset();
 
@@ -142,10 +145,7 @@
                 } else {
                     // 添加
                     doAdd();
-                }
-
-                
-
+                }      
             });
         }
 
@@ -168,11 +168,15 @@
                         // 刷新页面
                         location.reload();
 
-                    }else{
-                        //把错误信息显示在对话框中
-                        $.each(res.error, function(name,errorList){
-                            $('#id_'+name).next().text(errorList[0]);
-                        })
+                    } else {
+                            if (res.tips){
+                                alert(res.tips);
+                            } else {
+                                //把错误信息显示在对话框中
+                                $.each(res.error, function(name,errorList){
+                                    $('#id_'+name).next().text(errorList[0]);
+                                })
+                            }
                     } 
                 }
             })
@@ -260,6 +264,10 @@
 
         function bindBtnEditEvent(){
             $('.btn-edit').click(function(){
+
+
+                // 清除错误信息
+                $('.error-msg').empty();
 
                 // 清空对话框中的数据
                 $("#formAdd")[0].reset();

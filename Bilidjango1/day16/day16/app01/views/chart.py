@@ -33,4 +33,21 @@ def chart_bar(request):
         }
     }
     return JsonResponse(result)
+
+
+def chart_pie(request):
+    '''构造饼图'''
     
+    db_data_list = [
+        {'value': 1048, 'name': 'Search Engine'},
+        {'value': 735, 'name': 'Direct'},
+        {'value': 580, 'name': 'Email'},
+        {'value': 484, 'name': 'Union Ads'},
+        {'value': 300, 'name': 'Video Ads'},
+    ]
+    
+    result = {
+        'status': True,
+        'data': db_data_list,
+    }
+    return JsonResponse(result)

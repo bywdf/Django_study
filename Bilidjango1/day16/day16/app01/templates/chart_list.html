@@ -93,7 +93,7 @@
       function initPie(){
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('m3'));
-        
+
         option = {
           title: {
             text: '部门预算占比',
@@ -120,6 +120,7 @@
                 { value: 484, name: 'Union Ads' },
                 { value: 300, name: 'Video Ads' }
               ],
+              // 下面是饼图样式的配置
               emphasis: {
                 itemStyle: {
                   shadowBlur: 10,
@@ -131,8 +132,18 @@
           ]
         };
 
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+        $.ajax({
+          url:"/chart/pie/",
+          type:"get",
+          dataType:"JSON",
+          success: function(res){
+            if(res.status){
+              option.series[0].data = res.data;
+              // 使用刚指定的配置项和数据显示图表。
+              myChart.setOption(option);
+            }
+          }
+        })        
       }
 
     </script>

@@ -51,3 +51,21 @@ def chart_pie(request):
         'data': db_data_list,
     }
     return JsonResponse(result)
+
+
+def chart_line(request):
+    '''构造折线图'''
+    
+    x_axis = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    series_list = [150, 230, 224, 218, 135, 147, 260]    
+    
+    result = {
+        'status': True,
+        'data': {
+            'x_axis': x_axis,
+            'series_list': series_list,
+        }
+        }
+        
+    return JsonResponse(result)
+        

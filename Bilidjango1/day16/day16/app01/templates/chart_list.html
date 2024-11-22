@@ -6,7 +6,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">折线图</div>
             <div class="panel-body">
-                111111111111111
+                <div id="m1" style="width: 100%;height:300px;"></div>
             </div>
           </div>
         </div>
@@ -38,6 +38,7 @@
       $(function(){
         initBar();
         initPie();
+        initLine();
       })
 
 
@@ -94,56 +95,94 @@
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('m3'));
 
-        option = {
-          title: {
-            text: '部门预算占比',
-            subtext: '山东分公司',
-            left: 'center'
-          },
-          tooltip: {
-            trigger: 'item'
-          },
-          legend: {
-            // orient: 'vertical',
-            // left: 'left'
-            bottom: 0
-          },
-          series: [
-            {
-              name: '预算',  // 鼠标停留显示的标题
-              type: 'pie',
-              radius: '50%',
-              data: [
-                { value: 1048, name: 'Search Engine' },
-                { value: 735, name: 'Direct' },
-                { value: 580, name: 'Email' },
-                { value: 484, name: 'Union Ads' },
-                { value: 300, name: 'Video Ads' }
-              ],
-              // 下面是饼图样式的配置
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+        var option = {
+            title: {
+              text: '部门预算占比',
+              subtext: '山东分公司',
+              left: 'center'
+            },
+            tooltip: {
+              trigger: 'item'
+            },
+            legend: {
+              // orient: 'vertical',
+              // left: 'left'
+              bottom: 0
+            },
+            series: [
+              {
+                name: '预算',  // 鼠标停留显示的标题
+                type: 'pie',
+                radius: '50%',
+                data: [
+                  { value: 1048, name: 'Search Engine' },
+                  { value: 735, name: 'Direct' },
+                  { value: 580, name: 'Email' },
+                  { value: 484, name: 'Union Ads' },
+                  { value: 300, name: 'Video Ads' }
+                ],
+                // 下面是饼图样式的配置
+                emphasis: {
+                  itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                  }
                 }
               }
-            }
-          ]
-        };
+            ]
+          };
 
-        $.ajax({
+        $.ajax({ 
           url:"/chart/pie/",
           type:"get",
           dataType:"JSON",
           success: function(res){
             if(res.status){
-              option.series[0].data = res.data;
+              option.series[0].data = res.data;  // series里面第0个里面的data
+               // 使用刚指定的配置项和数据显示图表。
+               myChart.setOption(option);
+            }
+          }
+        })        
+      }
+
+
+       /***
+      初始化折线图
+      ***/
+      function initLine(){
+        var myChart = echarts.init(document.getElementById('m1'));
+
+        var option = {
+            xAxis: {
+              type: 'category',
+              data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+              type: 'value'
+            },
+            series: [
+              {
+                data: [150, 230, 224, 218, 135, 147, 260],
+                type: 'line'
+              }
+            ]
+          };
+
+        $.ajax({
+          url:"/chart/line/",
+          type:"get",
+          dataType:"JSON",
+          success: function(res){
+            if (res.status){
+              option.xAxis.data = res.data.x_axis;
+              option.series.data = res.data.series_list;
               // 使用刚指定的配置项和数据显示图表。
               myChart.setOption(option);
             }
           }
-        })        
+        })
       }
 
     </script>

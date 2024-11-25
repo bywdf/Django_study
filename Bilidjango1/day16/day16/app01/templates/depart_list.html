@@ -1,104 +1,66 @@
+{% extends "layout.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="{% static "plugins\bootstrap-3.4.1\dist\css\bootstrap.min.css" %}">
-  <style>
-    .navbar-default {
-      border-radius: 0;
-    }
-  </style>
-</head>
 
-<body>
-  <nav class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-          data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">用户系统管理</a>
+{% block content %}
+
+  <div class='container'>
+    <div style='margin-bottom: 10px'>
+      <a class='btn btn-success' href="/depart/add/">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        新建部门
+      </a>
+    </div>
+
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+        批量上传
       </div>
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><a href="/admin/list/">管理员账户</a></li>
-          <li><a href="/depart/list/">部门管理</a></li>
-          <li><a href="/user/list/">用户管理</a></li>
-          <li><a href="/pretty/list/">靓号管理</a></li>
-          <li><a href="/task/list/">任务管理</a></li>
-          <li><a href="/order/list/">订单管理</a></li>
-          <li><a href="/chart/list/">数据统计</a></li>
-          <li><a href="/upload/list/">文件提交</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">登录</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-              aria-expanded="false">{{ request.session.info.name }}<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">用户资料</a></li>
-              <li><a href="#">我的信息</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="/logout/">注销</a></li>
-            </ul>
-          </li>
-        </ul>
+      <div class="panel-body">
+        <form method="post" enctype="multipart/form-data" action="/depart/multi/">
+          {% csrf_token %}
+          <div class="form-group">
+            <input type="file" name="exc" required="required">
+          </div>
+          <input type="submit" value="上传" class="btn btn-info btn-sm">
+        </form>
       </div>
     </div>
-  </nav>
-  
-  <div>
-    <div class='container'>
-      <div style='margin-bottom: 10px'>
-        <a class='btn btn-success' href="/depart/add/">
-          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-          新建部门
-        </a>
+
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+        部门列表
       </div>
-      <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading">
-          <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-          部门列表
-        </div>
-  
-        <!-- Table -->
-        <table class="table table-bordered">
-          <thead>
+
+      <!-- Table -->
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in queryset %}
             <tr>
-              <th>ID</th>
-              <th>名称</th>
-              <th>操作</th>
+              <th scope="row">{{ obj.id }}</th>
+              <td>{{ obj.title }}</td>
+              <td>
+                <a class='btn btn-primary btn-xs' href="/depart/{{ obj.id }}/edit/">编辑</a>
+                <a class='btn btn-danger btn-xs' href="/depart/delete/?nid={{ obj.id }}">删除</a>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {% for obj in queryset %}
-              <tr>
-                <th scope="row">{{ obj.id }}</th>
-                <td>{{ obj.title }}</td>
-                <td>
-                  <a class='btn btn-primary btn-xs' href="/depart/{{ obj.id }}/edit/">编辑</a>
-                  <a class='btn btn-danger btn-xs' href="/depart/delete/?nid={{ obj.id }}">删除</a>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+          {% endfor %}
+        </tbody>
+      </table>
 
-      </div>
     </div>
-  </div>
-  <script src="{% static "js\jquery-3.3.1.min.js" %}"></script>
-  <script src="{% static "plugins\bootstrap-3.4.1\dist\js\bootstrap.min.js" %}"></script>
-</body>
 
-</html>
+  </div>
+
+{% endblock content %}

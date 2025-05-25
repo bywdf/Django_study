@@ -222,6 +222,7 @@
 
                 // 获取当前行的ID，并赋值给全局变量
                 var uid = $(this).attr('uid');
+                DELETE_ID = uid; // 新增此行，确保uid赋值给全局变量
                 console.log(uid);
             });
         }
